@@ -101,7 +101,20 @@
                                 '_field_name'  => 'title',
                                 '_field_trans' => get_field_translations($dataTypeContent, 'title')
                             ])
-                            <input type="text" class="form-control" id="title" name="title" placeholder="{{ __('voyager::generic.title') }}" value="{{ $dataTypeContent->title ?? '' }}">
+
+                            {{-- Добавление блока управления типом поля --}}
+                            @php
+                                $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
+                                $row = $dataTypeRows->where('field', 'title')->first();
+                            @endphp
+
+                            {{-- Если тип поля "Text", то тип выводимого поля будет "Textarea" --}}
+                            @if( $row->type == 'text' )
+                                <textarea class="form-control" name="title">{{ $dataTypeContent->title ?? '' }}</textarea>
+                            @else 
+                                <input type="text" class="form-control" id="title" name="title" placeholder="{{ __('voyager::generic.title') }}" value="{{ $dataTypeContent->title ?? '' }}">
+                            @endif
+
                         </div>
                     </div>
 
